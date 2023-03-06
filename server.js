@@ -14,8 +14,7 @@ const io = socket(server, {
   },
 });
 
-const SERVER_PORT = 8080;
-const SERVER_HOST = "localhost";
+const SERVER_PORT = process.env.PORT || 8080;
 
 io.on("connection", (socket) => {
   console.log("[IO] Connection => Server has new connection");
@@ -35,8 +34,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(SERVER_PORT, SERVER_HOST, () => {
+server.listen(SERVER_PORT, () => {
   console.log(
-    ` [HTTP] Listen => Server running at http://${SERVER_HOST}:${SERVER_PORT}`
+    ` [HTTP] Listen => Server running at http://localhost:${SERVER_PORT}`
   );
 });

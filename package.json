@@ -10,7 +10,7 @@
     "nodemon": "^2.0.21"
   },
   "scripts": {
-    "start": "nodemon server"
+    "start": "node server.js"
   },
   "name": "server",
   "version": "1.0.0",
