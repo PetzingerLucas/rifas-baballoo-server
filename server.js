@@ -1,20 +1,17 @@
-const koa = require("koa");
-const http = require("http");
-const socket = require("socket.io");
-const cors = require("@koa/cors");
+const { Server } = require("socket.io");
 
-const app = new koa();
+const app = require("express")();
+
+const cors = require("cors");
 app.use(cors());
 
-const server = http.createServer(app.callback());
+const server = require("http").createServer(app);
 
-const io = socket(server, {
+const io = new Server(server, {
   cors: {
     origin: "*",
   },
 });
-
-const SERVER_PORT = process.env.PORT || 8080;
 
 // Variável para armazenar as informações da rifa
 let raffleInfo = {};
@@ -64,8 +61,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(SERVER_PORT, () => {
-  console.log(
-    ` [HTTP] Listen => Server running at http://localhost:${SERVER_PORT}`
-  );
+server.listen(process.env.PORT || 3000, () => {
+  console.log("[HTTP] Listen => Server running");
 });
