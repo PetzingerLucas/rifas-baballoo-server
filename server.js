@@ -13,6 +13,10 @@ const io = new Server(server, {
 
 // middleware do cors
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 // Variável para armazenar as informações da rifa
 let raffleInfo = {};
