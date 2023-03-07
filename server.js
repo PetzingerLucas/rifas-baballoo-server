@@ -5,7 +5,7 @@ const app = require("express")();
 const cors = require("cors");
 app.use(cors());
 
-const server = require("http").createServer(app);
+const server = require("./vercel.js");
 
 const io = new Server(server, {
   cors: {
@@ -64,3 +64,5 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 3000, () => {
   console.log("[HTTP] Listen => Server running");
 });
+
+module.exports = server;
