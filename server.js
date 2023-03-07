@@ -1,17 +1,18 @@
 const { Server } = require("socket.io");
-
-const app = require("express")();
-
+const express = require("express");
+const http = require("http");
 const cors = require("cors");
-app.use(cors());
 
-const server = require("./vercel.js");
-
+const app = express();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
   },
 });
+
+// middleware do cors
+app.use(cors());
 
 // Variável para armazenar as informações da rifa
 let raffleInfo = {};
@@ -64,5 +65,3 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 3000, () => {
   console.log("[HTTP] Listen => Server running");
 });
-
-module.exports = server;
