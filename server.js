@@ -16,21 +16,51 @@ const io = socket(server, {
 
 const SERVER_PORT = process.env.PORT || 8080;
 
+// Variável para armazenar as informações da rifa
+let raffleInfo = {};
+
+// Objeto para armazenar as seleções
+let selections = {};
+
 io.on("connection", (socket) => {
   console.log("[IO] Connection => Server has new connection");
+
+  // Envia as informações da rifa e as seleções para o novo usuário conectado
+  socket.emit("raffle_info", raffleInfo);
+  socket.emit("selected", selections);
+
   socket.on("chat.message", (message) => {
     console.log("[SOCKET] message => ", message);
     io.emit("chat.message", message);
   });
 
-  socket.on("selected", (isSelected, name, selectedName) => {
-    console.log("[SOCKET] name => ", isSelected);
-    io.emit("selected", isSelected, name, selectedName);
+  console.log(`User connected: ${socket.id}`);
+  // Notificar todos os clientes sobre um novo usuário conectado
+  io.emit("user_connected", socket.id);
+
+  // ...
+
+  socket.on("selected", (newSelections) => {
+    // Atualiza as seleções
+    selections = newSelections;
+
+    // Envia as novas seleções para todos os usuários conectados
+    io.emit("selected", selections);
   });
+
   socket.on("disconnect", () => console.log("[SOCKET] Disconnected"));
 
-  socket.on("raffle_info", (state) => {
-    io.emit("raffle_info", state);
+  socket.on("get_raffle_info", () => {
+    socket.emit("raffle_info", raffleInfo);
+    console.log(raffleInfo);
+  });
+
+  socket.on("update_raffle_info", (newRaffleInfo) => {
+    // Atualiza as informações da rifa
+    raffleInfo = newRaffleInfo;
+
+    // Envia as novas informações da rifa para todos os usuários conectados
+    io.emit("raffle_info", raffleInfo);
   });
 });
 
