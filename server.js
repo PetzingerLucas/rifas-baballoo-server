@@ -36,6 +36,13 @@ io.on("connection", (socket) => {
     io.emit("chat.message", message);
   });
 
+  socket.on("update_selections", (newSelections) => {
+    // Atualiza o estado de seleções com o novo objeto vazio
+    selections = newSelections;
+
+    // Envia as novas seleções para todos os usuários conectados
+    io.emit("selected", selections);
+  });
   console.log(`User connected: ${socket.id}`);
   // Notificar todos os clientes sobre um novo usuário conectado
   io.emit("user_connected", socket.id);
@@ -66,6 +73,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 8080, () => {
   console.log("[HTTP] Listen => Server running");
 });
